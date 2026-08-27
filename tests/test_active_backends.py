@@ -34,3 +34,17 @@ class TextileRenderingTests(SimpleTestCase):
             '<p>Cr\u00e9dits by <strong>Zo\u00eb</strong>. Visit '
             '<a href="https://syrinscape.com/">Syrinscape</a></p>',
         )
+
+
+class MarkdownRenderingTests(SimpleTestCase):
+    def test_tilde_extension_renders_subscription_text(self):
+        template = Template(
+            '{% load markup %}{{ value|markdown:"pymdownx.tilde" }}'
+        )
+
+        self.assertEqual(
+            template.render(Context({
+                "value": "Pay ~~USD 10~~ USD 8",
+            })).strip(),
+            "<p>Pay <del>USD 10</del> USD 8</p>",
+        )
